@@ -30,8 +30,9 @@
                       <div class="product-item">
                         <span class="badge bg-success position-absolute m-3">{{ product.offer_rate }}%</span>
                         <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
-                        <figure style="height: 200px;width: 100%; object-fit: contain;background-image: url('{{ product.image.url }}');">
-                          <a href="index.html" title="Product Title">
+                        <figure style="height: 200px;width: 100%;">
+                          <a href="#" title="Product Title">
+                            <img src="{{ product.image.url }}" width="100%" style="object-fit: cover;" alt="">
 
                             
                           </a>

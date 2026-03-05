@@ -12,7 +12,7 @@ def home(request):
     return render(request,'index.html')
 
 def allproducts(request):
-    products = Product.objects.all() 
+    products = Product.objects.all().order_by('-created_time')
     return render(request,'allproducts.html', {'products': products})
 
 
