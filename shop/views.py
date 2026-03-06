@@ -9,7 +9,8 @@ from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
 def home(request):
-    return render(request,'index.html')
+    products = Product.objects.all().order_by('-created_time')[0:10]
+    return render(request,'index.html', {'products': products})
 
 def allproducts(request):
     products = Product.objects.all().order_by('-created_time')
@@ -55,3 +56,7 @@ def sign_in(request):
 def sign_out(request):
     logout(request)
     return redirect('home')
+
+def product_details(request, p_id):
+    product = Product.objects.get(id=p_id)
+    return render(request,'productdetail.html', {'product': product})
