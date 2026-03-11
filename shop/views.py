@@ -6,6 +6,9 @@ from shop.models import Product
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
+from django.db.models import Q
+from django.core.paginator import Paginator
+
 # Create your views here.
 
 def home(request):
@@ -14,7 +17,16 @@ def home(request):
 
 def allproducts(request):
     products = Product.objects.all().order_by('-created_time')
-    return render(request,'allproducts.html', {'products': products})
+    
+
+    qry = request.GET.get("q")
+    if qry:
+        products = Product.objects.filter(Q(name__icontains=qry)|Q(description__icontains=qry)).order_by('-created_time')
+
+    paginator = Paginator(products,5)
+    page = request.GET.get("page")
+    page_obj = paginator.get_page(page)
+    return render(request,'allproducts.html', {'page_obj': page_obj})
 
 
 def register(request):

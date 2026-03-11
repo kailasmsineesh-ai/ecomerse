@@ -3,7 +3,37 @@
 {% block title %}Product Detail{% endblock %}
 
 {% block content %}
-<h1>product details</h1>
-<img src="{{ product.image.url }}" alt="">
-<p>{{ product.name }}</p>
+
+<style>
+    .product_details {
+  padding: 30px;
+  color: #ec9b22;
+
+  height: 100px;
+  width: 100px;
+
+}
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ product.image.url }}" alt="" class="img-fluid">
+        </div>
+        <div class="col-md-6">
+            {% if product.BRAND.name  != "undefined" %}
+            <h1>{{ product.BRAND.name }}</h1>
+            {% endif %}
+            <h2>{{ product.name }}</h2>
+            <p><i>{{ product.CATEGORY.name }}</i></p>
+            <p>{{ product.description }}</p>
+            <h3>${{ product.price }}</h3>
+            <button class="btn btn-primary">Add to Cart</button>
+            <button class="btn btn-success">Buy Now</button>
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock %}    

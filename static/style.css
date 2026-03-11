@@ -720,3 +720,13 @@ h1,h2,h3,h4,h5,h6 {
     height: 740px;
   }
 }
+
+
+.product_details {
+  padding: 30px;
+  color: #ec9b22;
+
+  height: 100px;
+  width: 100px;
+
+}
