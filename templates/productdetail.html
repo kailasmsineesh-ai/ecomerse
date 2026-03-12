@@ -28,7 +28,7 @@
             <p><i>{{ product.CATEGORY.name }}</i></p>
             <p>{{ product.description }}</p>
             <h3>${{ product.price }}</h3>
-            <button class="btn btn-primary">Add to Cart</button>
+            <a href="{% url 'add_to_cart' product.id %}"><button class="btn btn-primary">Add to Cart</button></a>
             <button class="btn btn-success">Buy Now</button>
         </div>
     </div>

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 
-from shop.models import Product
+from shop.models import Product,Category,Cart,CartItem
 
 
 from django.contrib.auth.models import User
@@ -13,10 +13,19 @@ from django.core.paginator import Paginator
 
 def home(request):
     products = Product.objects.all().order_by('-created_time')[0:10]
-    return render(request,'index.html', {'products': products})
+    category = Category.objects.all()
+    cat = request.GET.get("category")
+    if cat:
+        products = products.filter(CATEGORY_id=cat)
+    return render(request,'index.html', {'products': products, 'category': category})
 
 def allproducts(request):
     products = Product.objects.all().order_by('-created_time')
+    category = Category.objects.all()
+
+    cat = request.GET.get("category")
+    if cat:
+        products = products.filter(CATEGORY_id=cat)
     
 
     qry = request.GET.get("q")
@@ -26,7 +35,7 @@ def allproducts(request):
     paginator = Paginator(products,5)
     page = request.GET.get("page")
     page_obj = paginator.get_page(page)
-    return render(request,'allproducts.html', {'page_obj': page_obj})
+    return render(request,'allproducts.html', {'page_obj': page_obj, 'category': category})
 
 
 def register(request):
@@ -72,3 +81,29 @@ def sign_out(request):
 def product_details(request, p_id):
     product = Product.objects.get(id=p_id)
     return render(request,'productdetail.html', {'product': product})
+
+
+def cart_id(request):
+    cart = request.session.session_key
+    if not cart:
+        cart = request.session.create()
+    return cart
+
+
+def add_to_cart(request, p_id):
+    product =Product.objects.get(id=p_id)
+    c_id = cart_id(request)
+    try:
+        cart = Cart.objects.get(cart_id=c_id)
+    except:
+        cart = Cart.objects.create(cart_id=c_id)
+
+    cartitem = CartItem.objects.filter(CART=cart, PRODUCT=product)
+    if cartitem.exists():
+        cartitem = cartitem
+        cartitem.quantity += 1
+        cartitem.save()
+    else:
+        CartItem.objects.create(CART=cart, PRODUCT=product, quantity=1)
+
+    return redirect('product_details', p_id=p_id)

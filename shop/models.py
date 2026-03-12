@@ -31,5 +31,13 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Cart(models.Model):
+    cart_id = models.CharField(max_length=255, unique=True)
 
+class CartItem(models.Model):
+    CART = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
+    PRODUCT = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    created_time = models.DateTimeField(auto_now_add=True)
     
