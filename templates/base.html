@@ -87,33 +87,25 @@
         <div class="order-md-last">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-primary">Your cart</span>
-            <span class="badge bg-primary rounded-pill">3</span>
+            <span class="badge bg-primary rounded-pill">{{ cart_item|length }}</span>
           </h4>
           <ul class="list-group mb-3">
+            {% for i in cart_item %}
             <li class="list-group-item d-flex justify-content-between lh-sm">
               <div>
-                <h6 class="my-0">Growers cider</h6>
-                <small class="text-body-secondary">Brief description</small>
+                <h6 class="my-0">{{ i.PRODUCT.name }}</h6>
+                <small class="text-body-secondary">Unit:{{ i.quantity}}</small><br>
+                <a href="CartItem/{{ i.id }}/decrease/">-</a> <span>{{ i.quantity}}</span><a href="/add_to_cart/{{ i.PRODUCT.id }}/">+</a>
               </div>
-              <span class="text-body-secondary">$12</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Fresh grapes</h6>
-                <small class="text-body-secondary">Brief description</small>
+              <span class="text-body-secondary">${{ i.PRODUCT.price }}</span>
+              <div><button class="btn btn-outline-danger btn-sm">Remove</button>
+              
               </div>
-              <span class="text-body-secondary">$8</span>
             </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Heinz tomato ketchup</h6>
-                <small class="text-body-secondary">Brief description</small>
-              </div>
-              <span class="text-body-secondary">$5</span>
-            </li>
+            {% endfor %}
             <li class="list-group-item d-flex justify-content-between">
               <span>Total (USD)</span>
-              <strong>$20</strong>
+              <strong>${{ cart_total }}</strong>
             </li>
           </ul>
   
@@ -216,7 +208,7 @@
             <div class="cart text-end d-none d-lg-block dropdown">
               <button class="border-0 bg-transparent d-flex flex-column gap-2 lh-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
                 <span class="fs-6 text-muted dropdown-toggle">Your Cart</span>
-                <span class="cart-total fs-5 fw-bold">$1290.00</span>
+                <span class="cart-total fs-5 fw-bold">${{ cart_total }}</span>
               </button>
             </div>
           </div>

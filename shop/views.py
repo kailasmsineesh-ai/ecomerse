@@ -10,16 +10,51 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 
 # Create your views here.
+def cart_id(request):
+    cart = request.session.session_key
+    if not cart:
+        cart = request.session.create()
+        cart = request.session.session_key
+
+    return cart
+
+def cart(request):
+    cart = cart_id(request)
+
+    cart_item = CartItem.objects.filter(CART__cart_id = cart)
+    tamount =0
+    for i in cart_item:
+        tamount += i.PRODUCT.price
+    cart_context= {
+        "cart_item":cart_item,
+        "cart_total":tamount
+    }
+
+    return cart_context
 
 def home(request):
+
+    cart_context = cart(request)
+    cart_item = cart_context['cart_item']
+    cart_total = cart_context['cart_total']
+
+
+
+
+
     products = Product.objects.all().order_by('-created_time')[0:10]
     category = Category.objects.all()
     cat = request.GET.get("category")
     if cat:
         products = products.filter(CATEGORY_id=cat)
-    return render(request,'index.html', {'products': products, 'category': category})
+    return render(request,'index.html', {'products': products, 'category': category ,"cart_item":cart_item,'cart_total':cart_total })
 
 def allproducts(request):
+    cart_context = cart(request)
+    cart_item = cart_context['cart_item']
+    cart_total = cart_context['cart_total']
+
+
     products = Product.objects.all().order_by('-created_time')
     category = Category.objects.all()
 
@@ -35,7 +70,7 @@ def allproducts(request):
     paginator = Paginator(products,5)
     page = request.GET.get("page")
     page_obj = paginator.get_page(page)
-    return render(request,'allproducts.html', {'page_obj': page_obj, 'category': category})
+    return render(request,'allproducts.html', {'page_obj': page_obj, 'category': category,"cart_item":cart_item,'cart_total':cart_total})
 
 
 def register(request):
@@ -57,12 +92,21 @@ def register(request):
         user = User.objects.create_user(username=username, email=email, password=password, first_name=fname, last_name=lname)
         user.save()
         return redirect('login')
+    cart_context = cart(request)
+    cart_item = cart_context['cart_item']
+    cart_total = cart_context['cart_total']
 
 
-    return render(request,'register.html')
+
+    return render(request,'register.html', {"cart_item":cart_item,'cart_total':cart_total})
 
 
 def sign_in(request):
+
+    cart_context = cart(request)
+    cart_item = cart_context['cart_item']
+    cart_total = cart_context['cart_total']
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -72,22 +116,22 @@ def sign_in(request):
             return redirect('home')
         else:
             return render(request,'login.html', {'error': 'Invalid username or password'})
-    return render(request,'login.html')
+    return render(request,'login.html' , {"cart_item":cart_item,'cart_total':cart_total})
 
 def sign_out(request):
     logout(request)
     return redirect('home')
 
 def product_details(request, p_id):
+    cart_context = cart(request)
+    cart_item = cart_context['cart_item']
+    cart_total = cart_context['cart_total']
+
     product = Product.objects.get(id=p_id)
-    return render(request,'productdetail.html', {'product': product})
+    return render(request,'productdetail.html', {'product': product, "cart_item": cart_item, 'cart_total': cart_total})
 
 
-def cart_id(request):
-    cart = request.session.session_key
-    if not cart:
-        cart = request.session.create()
-    return cart
+
 
 
 def add_to_cart(request, p_id):
@@ -97,13 +141,16 @@ def add_to_cart(request, p_id):
         cart = Cart.objects.get(cart_id=c_id)
     except:
         cart = Cart.objects.create(cart_id=c_id)
-
-    cartitem = CartItem.objects.filter(CART=cart, PRODUCT=product)
-    if cartitem.exists():
-        cartitem = cartitem
-        cartitem.quantity += 1
-        cartitem.save()
-    else:
+    try :
+        cartitem = CartItem.objects.get(CART=cart, PRODUCT=product)
+        if cartitem:
+            cartitem = cartitem
+            cartitem.quantity += 1
+            cartitem.save()
+        else:
+            CartItem.objects.create(CART=cart, PRODUCT=product, quantity=1)
+        
+    except:
         CartItem.objects.create(CART=cart, PRODUCT=product, quantity=1)
 
-    return redirect('product_details', p_id=p_id)
+    return redirect('home')
