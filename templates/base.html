@@ -95,10 +95,10 @@
               <div>
                 <h6 class="my-0">{{ i.PRODUCT.name }}</h6>
                 <small class="text-body-secondary">Unit:{{ i.quantity}}</small><br>
-                <a href="CartItem/{{ i.id }}/decrease/">-</a> <span>{{ i.quantity}}</span><a href="/add_to_cart/{{ i.PRODUCT.id }}/">+</a>
+                <a href="/minus_cart/{{ i.PRODUCT.id }}/">-</a> <span>{{ i.quantity}}</span><a href="/add_to_cart/{{ i.PRODUCT.id }}/">+</a>
               </div>
               <span class="text-body-secondary">${{ i.PRODUCT.price }}</span>
-              <div><button class="btn btn-outline-danger btn-sm">Remove</button>
+              <div><a href="/remove_cart/{{ i.product.id }}"><button class="btn btn-outline-danger btn-sm">Remove</button></a>
               
               </div>
             </li>

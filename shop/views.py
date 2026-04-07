@@ -154,3 +154,44 @@ def add_to_cart(request, p_id):
         CartItem.objects.create(CART=cart, PRODUCT=product, quantity=1)
 
     return redirect('home')
+
+def minus_from_cart(request,p_id):
+    product=Product.objects.get(id=p_id)
+    c_id=cart_id(request)
+    cart = Cart.objects.get(cart_id=c_id)
+    try:
+        cartitem=CartItem.objects.get(CART=cart, PRODUCT=product)
+        if cartitem:
+                if cartitem.quantity == 1:
+                    cartitem.delete()
+                else:
+                    cartitem = cartitem
+                    cartitem.quantity -= 1
+                    cartitem.save()
+    except:
+        pass
+    return redirect('home')
+
+
+
+def remove_cart_item(request,p_id):
+    product=Product.objects.get(id=p_id)
+    c_id=cart_id(request)
+    cart= Cart.objects.get(cart_id=c_id)
+    cartitem=CartItem.objects.get(CART=cart,PRODUCT=product)
+    cartitem.delete()
+
+    return redirect('home')
+
+
+
+
+
+
+
+
+
+
+
+
+    

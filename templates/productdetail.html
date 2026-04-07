@@ -18,7 +18,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <img src="{{ product.image.url }}" alt="" class="img-fluid">
+            <img style="height: 500px; width: 100%;object-fit: cover;" src="{{ product.image.url }}" alt="" class="img-fluid">
         </div>
         <div class="col-md-6">
             {% if product.BRAND.name  != "undefined" %}

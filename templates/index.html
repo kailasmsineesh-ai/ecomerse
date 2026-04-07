@@ -345,7 +345,7 @@
                       <div class="product-item">
                         <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
                         <figure>
-                          <a href="index.html" title="Product Title">
+                          <a href="{% url 'product_details' i.id %}" title="Product Title">
                             <img src="{{ i.image.url }}" width="100%" style="object-fit: cover; height: 200px;"  class="tab-image">
                           </a>
                         </figure>
