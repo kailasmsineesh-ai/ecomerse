@@ -29,7 +29,7 @@
             <p>{{ product.description }}</p>
             <h3>${{ product.price }}</h3>
             <a href="{% url 'add_to_cart' product.id %}"><button class="btn btn-primary">Add to Cart</button></a>
-            <button class="btn btn-success">Buy Now</button>
+           <a href="{% url 'buynow' %}"> <button class="btn btn-success">Buy Now</button></a>
         </div>
     </div>
 </div>

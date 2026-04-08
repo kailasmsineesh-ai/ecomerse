@@ -40,4 +40,20 @@ class CartItem(models.Model):
     PRODUCT = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     created_time = models.DateTimeField(auto_now_add=True)
+
+
+# address
+class Address(models.Model):
+
+    fullname=models.CharField(max_length=100)
+    emailaddress=models.CharField(max_length=100)
+    phonenumber=models.IntegerField()
+    streetaddress=models.CharField(max_length=500)
+    city=models.CharField(max_length=100)
+    setate=models.CharField(max_length=100)
+    postalcode=models.IntegerField()
+
+
+
+# orders 
     

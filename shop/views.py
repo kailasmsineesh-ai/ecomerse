@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.core.paginator import Paginator
 
+
 # Create your views here.
 def cart_id(request):
     cart = request.session.session_key
@@ -24,7 +25,7 @@ def cart(request):
     cart_item = CartItem.objects.filter(CART__cart_id = cart)
     tamount =0
     for i in cart_item:
-        tamount += i.PRODUCT.price
+        tamount += i.PRODUCT.price*i.quantity
     cart_context= {
         "cart_item":cart_item,
         "cart_total":tamount
@@ -183,6 +184,12 @@ def remove_cart_item(request,p_id):
 
     return redirect('home')
 
+
+def buynow(request):
+  
+    return render(request, 'buynow.html')
+
+    
 
 
 
